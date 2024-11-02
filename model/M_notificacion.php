@@ -56,6 +56,23 @@ class M_notificacion {
             return "Error en la eliminacion de la notificacion: " . $stmt->errorInfo()[2];
         }
     }
+
+    public function editarNotificacion($idnotificacion, $mensaje, $programado_para) {
+        $query = "UPDATE notificacion SET mensaje = :mensaje, programado_para = :programado_para WHERE idnotificacion = :idnotificacion";
+        $stmt = $this->conexion->prepare($query);
+    
+        // Enlazar los parámetros
+        $stmt->bindParam(':idnotificacion', $idnotificacion, PDO::PARAM_INT);
+        $stmt->bindParam(':mensaje', $mensaje, PDO::PARAM_STR);
+        $stmt->bindParam(':programado_para', $programado_para, PDO::PARAM_STR);
+    
+        if ($stmt->execute()) {
+            return "Notificación actualizada correctamente";
+        } else {
+            return "Error al actualizar la notificación: " . $stmt->errorInfo()[2];
+        }
+    }
+    
     
 }
 ?>

@@ -48,21 +48,73 @@ $notificaciones = $notificacionModel->obtenerNotificaciones();
                     <?php foreach ($notificaciones as $notificacion): ?>
                         <tr>
                             <td><?php echo $notificacion->mensaje; ?></td>
-                            <td><?php echo $notificacion->creado_en; ?></td>
+                            <td><?php echo $notificacion->programado_para; ?></td>
                             <td>
-                                <!-- Botones de editar y eliminar -->
-                                <button class="btn btn-warning btn-sm" title="Editar">
+                                <!-- Botón para abrir el modal de edición -->
+                                <button class="btn btn-warning btn-sm" title="Editar" data-bs-toggle="modal"
+                                    data-bs-target="#editarModal<?php echo $notificacion->idnotificacion; ?>">
                                     <i class="fas fa-edit"></i>
                                 </button>
+
                                 <!-- Formulario para eliminar la notificación -->
                                 <form action="index.php" method="GET" class="d-inline">
                                     <input type="hidden" name="accion" value="eliminar">
                                     <input type="hidden" name="idnotificacion"
                                         value="<?php echo $notificacion->idnotificacion; ?>">
-                                    <button type="submit" class="btn btn-danger btn-sm ms-2" title="Eliminar">
+                                    <button type="submit" class="btn btn-danger btn-sm ms-2" title="Eliminar"
+                                        onclick="return confirm('¿Estás seguro de que deseas eliminar esta notificación?');">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </form>
+
+                                <!-- Modal para editar la notificación -->
+                                <div class="modal fade" id="editarModal<?php echo $notificacion->idnotificacion; ?>"
+                                    tabindex="-1"
+                                    aria-labelledby="editarModalLabel<?php echo $notificacion->idnotificacion; ?>"
+                                    aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <form action="index.php" method="POST">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title"
+                                                        id="editarModalLabel<?php echo $notificacion->idnotificacion; ?>">
+                                                        Editar Notificación</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Cerrar"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <input type="hidden" name="accion" value="editar">
+                                                    <input type="hidden" name="idnotificacion"
+                                                        value="<?php echo $notificacion->idnotificacion; ?>">
+                                                    <div class="mb-3">
+                                                        <label for="mensaje<?php echo $notificacion->idnotificacion; ?>"
+                                                            class="form-label">Mensaje</label>
+                                                        <input type="text" class="form-control"
+                                                            id="mensaje<?php echo $notificacion->idnotificacion; ?>"
+                                                            name="mensaje"
+                                                            value="<?php echo htmlspecialchars($notificacion->mensaje); ?>"
+                                                            required>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label
+                                                            for="programado_para<?php echo $notificacion->idnotificacion; ?>"
+                                                            class="form-label">Programado Para</label>
+                                                        <input type="datetime-local" class="form-control"
+                                                            id="programado_para<?php echo $notificacion->idnotificacion; ?>"
+                                                            name="programado_para"
+                                                            value="<?php echo date('Y-m-d\TH:i', strtotime($notificacion->programado_para)); ?>"
+                                                            required>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                        data-bs-dismiss="modal">Cancelar</button>
+                                                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
                             </td>
 
                         </tr>
