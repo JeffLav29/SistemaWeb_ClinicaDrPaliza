@@ -43,5 +43,19 @@ class M_notificacion {
             return "Error en la inserción de la notificación: " . $stmt->errorInfo()[2];
         }
     }
+
+    public function eliminarNotificacion($idnotificacion){
+        $query = "DELETE FROM notificacion WHERE idnotificacion = :idnotificacion";
+        $stmt = $this->conexion->prepare($query);
+    
+        $stmt->bindParam(':idnotificacion', $idnotificacion, PDO::PARAM_INT);
+    
+        if ($stmt->execute()) {
+            return "Notificacion Eliminada Correctamente";
+        } else {
+            return "Error en la eliminacion de la notificacion: " . $stmt->errorInfo()[2];
+        }
+    }
+    
 }
 ?>

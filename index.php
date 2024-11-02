@@ -54,9 +54,11 @@ $notificaciones = $notificacionModel->obtenerNotificaciones();
                                 <button class="btn btn-warning btn-sm" title="Editar">
                                     <i class="fas fa-edit"></i>
                                 </button>
-                                <form action="controller/C_notificacion.php" method="POST" class="d-inline">
-                                    <input type="hidden" name="id_notificacion" value="<?php echo $notificacion->id_notificacion; ?>">
-                                    <input type="hidden" name="action" value="eliminar">
+                                <!-- Formulario para eliminar la notificación -->
+                                <form action="index.php" method="GET" class="d-inline">
+                                    <input type="hidden" name="accion" value="eliminar">
+                                    <input type="hidden" name="idnotificacion"
+                                        value="<?php echo $notificacion->idnotificacion; ?>">
                                     <button type="submit" class="btn btn-danger btn-sm ms-2" title="Eliminar">
                                         <i class="fas fa-trash"></i>
                                     </button>
