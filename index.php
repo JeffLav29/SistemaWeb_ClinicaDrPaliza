@@ -21,21 +21,40 @@ $notificaciones = $notificacionModel->obtenerNotificaciones();
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
         integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOMk0E5hE7gE1Y2Xn5gU2GCD+5wJ6VzMv+G2pO1D" crossorigin="anonymous">
+    <link rel="stylesheet" href="style/styleNotificaciones.css">
 </head>
 
 <body>
+    <header class="d-flex justify-content-between align-items-center p-3 bg-dark text-white">
+        <h5 class="m-0">Bienvenido, Jefferson</h5>
+        <div class="d-none d-md-flex">
+            <a href="#" class="header-btn text-decoration-none me-4"><i class="fas fa-home"></i>Inicio</a>
+            <a href="#" class="header-btn text-decoration-none me-4"><i class="fas fa-user"></i>Perfil</a>
+            <a href="#" class="header-btn text-decoration-none"><i class="fas fa-sign-out-alt"></i>Cerrar Sesión</a>
+        </div>
+
+        <div class="dropdown d-md-none">
+            <a class="header-btn" href="#" id="dropdownMenuLink" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                <i class="fas fa-bars"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
+                <li><a class="dropdown-item" href="#"><i class="fas fa-home"></i> Inicio</a></li>
+                <li><a class="dropdown-item" href="#"><i class="fas fa-user"></i> Perfil</a></li>
+                <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a></li>
+            </ul>
+        </div>
+    </header>
 
     <h1 class="text-center p-3">Cuenta con las Siguientes Notificaciones</h1>
-    <div class="container d-flex flex-column align-items-center">
-        <!-- Mostrar mensaje de éxito o error -->
-        <?php if (isset($_GET['mensaje'])): ?>
-            <div class="alert alert-success">
-                <?php echo htmlspecialchars($_GET['mensaje']); ?>
-            </div>
-        <?php endif; ?>
-
-        <div class="col-12 col-md-8 col-lg-6 mb-4">
-            <!-- Tabla para mostrar los datos -->
+    <div class="content-container">
+        <div class="table-container col-12 col-md-8 col-lg-6 mb-4">
+            <div class="mb-3" style="margin-left: -15px;">
+            <strong></strong>
+            <button type="button" class="btn btn-primary ms-3" data-bs-toggle="modal" data-bs-target="#crearModal">
+                Crear Nuevo
+            </button>
+        </div>
             <table class="table">
                 <thead class="table-dark">
                     <tr>
@@ -50,13 +69,11 @@ $notificaciones = $notificacionModel->obtenerNotificaciones();
                             <td><?php echo $notificacion->mensaje; ?></td>
                             <td><?php echo $notificacion->programado_para; ?></td>
                             <td>
-                                <!-- Botón para abrir el modal de edición -->
                                 <button class="btn btn-warning btn-sm" title="Editar" data-bs-toggle="modal"
                                     data-bs-target="#editarModal<?php echo $notificacion->idnotificacion; ?>">
                                     <i class="fas fa-edit"></i>
                                 </button>
 
-                                <!-- Formulario para eliminar la notificación -->
                                 <form action="index.php" method="GET" class="d-inline">
                                     <input type="hidden" name="accion" value="eliminar">
                                     <input type="hidden" name="idnotificacion"
@@ -67,7 +84,6 @@ $notificaciones = $notificacionModel->obtenerNotificaciones();
                                     </button>
                                 </form>
 
-                                <!-- Modal para editar la notificación -->
                                 <div class="modal fade" id="editarModal<?php echo $notificacion->idnotificacion; ?>"
                                     tabindex="-1"
                                     aria-labelledby="editarModalLabel<?php echo $notificacion->idnotificacion; ?>"
@@ -116,19 +132,13 @@ $notificaciones = $notificacionModel->obtenerNotificaciones();
                                     </div>
                                 </div>
                             </td>
-
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
             </table>
         </div>
-
-        <div class="col-12 col-md-8 col-lg-6 mb-4">
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#crearModal">
-                Crear
-            </button>
-        </div>
     </div>
+
 
     <div class="modal fade" id="crearModal" tabindex="-1" aria-labelledby="crearModalLabel" aria-hidden="true">
         <div class="modal-dialog">

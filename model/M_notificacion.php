@@ -35,8 +35,7 @@ class M_notificacion {
         $stmt->bindParam(':paciente_id', $paciente_id, PDO::PARAM_INT);
         $stmt->bindParam(':mensaje', $mensaje, PDO::PARAM_STR);
         $stmt->bindParam(':programado_para', $programado_para, PDO::PARAM_STR);
-    
-        // Ejecuta la consulta y retorna el resultado
+
         if ($stmt->execute()) {
             return "Notificación insertada exitosamente.";
         } else {
@@ -60,8 +59,7 @@ class M_notificacion {
     public function editarNotificacion($idnotificacion, $mensaje, $programado_para) {
         $query = "UPDATE notificacion SET mensaje = :mensaje, programado_para = :programado_para WHERE idnotificacion = :idnotificacion";
         $stmt = $this->conexion->prepare($query);
-    
-        // Enlazar los parámetros
+
         $stmt->bindParam(':idnotificacion', $idnotificacion, PDO::PARAM_INT);
         $stmt->bindParam(':mensaje', $mensaje, PDO::PARAM_STR);
         $stmt->bindParam(':programado_para', $programado_para, PDO::PARAM_STR);
