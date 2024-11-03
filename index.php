@@ -6,9 +6,16 @@ $notificacionModel = new M_notificacion();
 $notificacionControlador = new C_notificacion();
 $notificacionControlador->manejarSolicitud();
 
-$notificaciones = $notificacionModel->obtenerNotificaciones();
+$notificacionesPorPagina = 10; 
+$paginaActual = isset($_GET['pagina']) ? (int) $_GET['pagina'] : 1;
+$totalNotificaciones = count($notificacionModel->obtenerNotificaciones());
+$totalPaginas = ceil($totalNotificaciones / $notificacionesPorPagina);
 
+$inicio = ($paginaActual - 1) * $notificacionesPorPagina;
+
+$notificaciones = array_slice($notificacionModel->obtenerNotificaciones(), $inicio, $notificacionesPorPagina);
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -50,11 +57,11 @@ $notificaciones = $notificacionModel->obtenerNotificaciones();
     <div class="content-container">
         <div class="table-container col-12 col-md-8 col-lg-6 mb-4">
             <div class="mb-3" style="margin-left: -15px;">
-            <strong></strong>
-            <button type="button" class="btn btn-primary ms-3" data-bs-toggle="modal" data-bs-target="#crearModal">
-                Crear Nuevo
-            </button>
-        </div>
+                <strong></strong>
+                <button type="button" class="btn btn-primary ms-3" data-bs-toggle="modal" data-bs-target="#crearModal">
+                    Crear Nuevo
+                </button>
+            </div>
             <table class="table">
                 <thead class="table-dark">
                     <tr>
@@ -136,6 +143,30 @@ $notificaciones = $notificacionModel->obtenerNotificaciones();
                     <?php endforeach; ?>
                 </tbody>
             </table>
+
+            <nav aria-label="Paginación">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item <?php if ($paginaActual <= 1)
+                        echo 'disabled'; ?>">
+                        <a class="page-link" href="?pagina=<?php echo $paginaActual - 1; ?>" aria-label="Anterior">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <?php for ($i = 1; $i <= $totalPaginas; $i++): ?>
+                        <li class="page-item <?php if ($paginaActual == $i)
+                            echo 'active'; ?>">
+                            <a class="page-link" href="?pagina=<?php echo $i; ?>"><?php echo $i; ?></a>
+                        </li>
+                    <?php endfor; ?>
+                    <li class="page-item <?php if ($paginaActual >= $totalPaginas)
+                        echo 'disabled'; ?>">
+                        <a class="page-link" href="?pagina=<?php echo $paginaActual + 1; ?>" aria-label="Siguiente">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
         </div>
     </div>
 
@@ -148,7 +179,7 @@ $notificaciones = $notificacionModel->obtenerNotificaciones();
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="index.php" method="POST">
+                    <form action="index.php" method="POST" onsubmit="setDefaultTimeIfNeeded()">
                         <div class="mb-3">
                             <label for="id_paciente" class="form-label">Id Paciente</label>
                             <input type="text" class="form-control" id="paciente_id" name="paciente_id" required>
@@ -159,9 +190,9 @@ $notificaciones = $notificacionModel->obtenerNotificaciones();
                                 placeholder="Escribe tu mensaje aquí..."></textarea>
                         </div>
                         <div class="mb-3">
-                            <label for="fecha" class="form-label">Fecha</label>
-                            <input type="date" class="form-control" id="programado_para" name="programado_para"
-                                required>
+                            <label for="programado_para" class="form-label">Fecha y Hora</label>
+                            <input type="datetime-local" class="form-control" id="programado_para"
+                                name="programado_para" required>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
@@ -172,6 +203,17 @@ $notificaciones = $notificacionModel->obtenerNotificaciones();
             </div>
         </div>
     </div>
+
+    <script>
+        function setDefaultTimeIfNeeded() {
+            const dateTimeField = document.getElementById("programado_para");
+            if (dateTimeField.value === "") {
+                const today = new Date().toISOString().slice(0, 10);
+                dateTimeField.value = `${today}T00:00`;
+            }
+        }
+    </script>
+
 
 
 
