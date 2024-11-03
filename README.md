@@ -47,5 +47,5 @@ Este proyecto es un sistema de notificaciones para la clínica Dr. Paliza. Permi
 - **/db**: Archivos de configuración y scripts SQL para la base de datos.
 
 ## Contribuciones
-
+@RemixGG06
 
