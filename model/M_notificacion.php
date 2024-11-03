@@ -1,5 +1,5 @@
 <?php
-include "model/Conexion.php";
+require_once "model/Conexion.php";
 
 class M_notificacion {
     private $conexion;
@@ -27,12 +27,14 @@ class M_notificacion {
         }
     }
 
-    public function insertarNotificacion($paciente_id, $mensaje, $programado_para) {
-        $query = "INSERT INTO notificacion (paciente_id, mensaje, programado_para, creado_en, leido) 
-                  VALUES (:paciente_id, :mensaje, :programado_para, NOW(), 0)";
+    public function insertarNotificacion($medico_id,$paciente_id,$motivo, $mensaje, $programado_para) {
+        $query = "INSERT INTO notificacion (medico_id,paciente_id,motivo, mensaje, programado_para, creado_en, leido) 
+                  VALUES (:medico_id ,:paciente_id, :motivo ,:mensaje, :programado_para, NOW(), 0)";
         $stmt = $this->conexion->prepare($query);
     
+        $stmt->bindParam(':medico_id', $medico_id, PDO::PARAM_INT);
         $stmt->bindParam(':paciente_id', $paciente_id, PDO::PARAM_INT);
+        $stmt->bindParam(':motivo', $motivo, PDO::PARAM_STR);
         $stmt->bindParam(':mensaje', $mensaje, PDO::PARAM_STR);
         $stmt->bindParam(':programado_para', $programado_para, PDO::PARAM_STR);
 
@@ -56,11 +58,15 @@ class M_notificacion {
         }
     }
 
-    public function editarNotificacion($idnotificacion, $mensaje, $programado_para) {
-        $query = "UPDATE notificacion SET mensaje = :mensaje, programado_para = :programado_para WHERE idnotificacion = :idnotificacion";
+    public function editarNotificacion($idnotificacion, $medico_id, $motivo, $mensaje, $programado_para) {
+        $query = "UPDATE notificacion 
+                  SET medico_id = :medico_id, motivo = :motivo, mensaje = :mensaje, programado_para = :programado_para 
+                  WHERE idnotificacion = :idnotificacion";
         $stmt = $this->conexion->prepare($query);
-
+    
         $stmt->bindParam(':idnotificacion', $idnotificacion, PDO::PARAM_INT);
+        $stmt->bindParam(':medico_id', $medico_id, PDO::PARAM_INT);
+        $stmt->bindParam(':motivo', $motivo, PDO::PARAM_STR);
         $stmt->bindParam(':mensaje', $mensaje, PDO::PARAM_STR);
         $stmt->bindParam(':programado_para', $programado_para, PDO::PARAM_STR);
     
@@ -70,6 +76,7 @@ class M_notificacion {
             return "Error al actualizar la notificación: " . $stmt->errorInfo()[2];
         }
     }
+    
     
     
 }

@@ -98,7 +98,7 @@ CREATE TABLE `medico` (
   UNIQUE KEY `user_id_UNIQUE` (`user_id`),
   UNIQUE KEY `numero_licencia_UNIQUE` (`numero_licencia`),
   CONSTRAINT `fk_medicoii` FOREIGN KEY (`user_id`) REFERENCES `usuario` (`idusuario`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -107,6 +107,7 @@ CREATE TABLE `medico` (
 
 LOCK TABLES `medico` WRITE;
 /*!40000 ALTER TABLE `medico` DISABLE KEYS */;
+INSERT INTO `medico` VALUES (11,12,'Carlos','López','Cardiología','LIC12345','987654321','Av. Salud 123, Lima'),(12,13,'María','Pérez','Pediatría','LIC67890','987654322','Av. Niños 456, Lima'),(13,14,'Luis','González','Dermatología','LIC54321','987654323','Av. Piel 789, Lima'),(14,15,'Ana','Ramírez','Ginecología','LIC98765','987654324','Av. Mujer 101, Lima'),(15,16,'José','Fernández','Neurología','LIC13579','987654325','Av. Cerebro 202, Lima');
 /*!40000 ALTER TABLE `medico` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -121,6 +122,7 @@ CREATE TABLE `notificacion` (
   `idnotificacion` int NOT NULL AUTO_INCREMENT,
   `medico_id` int DEFAULT NULL,
   `paciente_id` int DEFAULT NULL,
+  `motivo` varchar(255) NOT NULL,
   `mensaje` varchar(255) NOT NULL,
   `creado_en` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `programado_para` timestamp NULL DEFAULT NULL,
@@ -130,7 +132,7 @@ CREATE TABLE `notificacion` (
   KEY `fk_paciente_idx` (`paciente_id`),
   CONSTRAINT `fk_medico_idi` FOREIGN KEY (`medico_id`) REFERENCES `medico` (`idmedico`),
   CONSTRAINT `fk_pacientedi` FOREIGN KEY (`paciente_id`) REFERENCES `paciente` (`idpaciente`)
-) ENGINE=InnoDB AUTO_INCREMENT=75 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=87 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -139,7 +141,7 @@ CREATE TABLE `notificacion` (
 
 LOCK TABLES `notificacion` WRITE;
 /*!40000 ALTER TABLE `notificacion` DISABLE KEYS */;
-INSERT INTO `notificacion` VALUES (36,NULL,7,'Recordatorio','2024-10-31 17:30:24','2024-11-01 15:00:00',0),(37,NULL,8,'Sus resultados de laboratorio están listos en su perfil','2024-10-31 17:30:24','2024-11-02 14:00:00',0),(38,NULL,9,'Recordatorio: Consulta de seguimiento con el Dr. Ramírez','2024-10-31 17:30:24','2024-11-03 20:00:00',0),(39,NULL,7,'Vacunación contra la influenza programada para el lunes','2024-10-31 17:30:24','2024-11-04 13:00:00',1),(40,NULL,8,'Evaluación de tratamiento posoperatorio agendada para mañana','2024-10-31 17:30:24','2024-11-01 19:30:00',0),(41,NULL,9,'Recordatorio: Consulta pediátrica para el niño a las 11:00 AM','2024-10-31 17:30:24','2024-11-02 16:00:00',0),(42,NULL,7,'Recordatorio de medicación: Recuerde tomar su tratamiento a las 8:00 PM','2024-10-31 17:30:24','2024-11-02 01:00:00',1),(43,NULL,8,'Control anual programado para chequeo de salud general','2024-10-31 17:30:24','2024-11-05 14:00:00',0),(44,NULL,9,'Nueva alerta de salud: consulte su portal para más detalles','2024-10-31 17:30:24','2024-11-01 18:00:00',0),(45,NULL,7,'Felicitaciones: Ha sido dado de alta con éxito','2024-10-31 17:30:24','2024-11-02 15:30:00',1),(50,NULL,7,'Este es un mensaje de prueba','2024-11-02 03:59:15','2024-11-01 15:00:00',0),(52,NULL,7,'Mensaje','2024-11-02 04:04:10','2024-11-16 05:00:00',0);
+INSERT INTO `notificacion` VALUES (78,11,7,'Consulta de seguimiento','Recordatorio: Consulta de seguimiento programada.','2024-11-01 15:00:00','2024-11-05 15:00:00',0),(79,12,8,'Control de rutina','Recordatorio: Control de rutina agendado para la fecha.','2024-11-01 19:00:00','2024-11-06 14:00:00',0),(80,13,9,'Revisión dermatológica','Recordatorio: Revisión dermatológica programada.','2024-11-02 14:30:00','2024-11-07 14:30:00',0),(81,14,8,'Consulta ginecológica','Recordatorio: Consulta ginecológica pendiente.','2024-11-03 16:00:00','2024-11-08 16:00:00',0),(82,15,7,'Evaluación neurológica','Recordatorio: Evaluación neurológica programada.','2024-11-04 20:00:00','2024-11-09 20:00:00',0);
 /*!40000 ALTER TABLE `notificacion` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -189,7 +191,7 @@ CREATE TABLE `usuario` (
   PRIMARY KEY (`idusuario`),
   UNIQUE KEY `nom_user_UNIQUE` (`nom_user`),
   UNIQUE KEY `correo_UNIQUE` (`correo`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -198,7 +200,7 @@ CREATE TABLE `usuario` (
 
 LOCK TABLES `usuario` WRITE;
 /*!40000 ALTER TABLE `usuario` DISABLE KEYS */;
-INSERT INTO `usuario` VALUES (11,'MoncadaPerez','12345','moncadaPerez@gmail.com','Medico');
+INSERT INTO `usuario` VALUES (12,'carlos.lopez','password123','carlos.lopez@clinica.com','medico'),(13,'maria.perez','password456','maria.perez@clinica.com','medico'),(14,'luis.gonzalez','password789','luis.gonzalez@clinica.com','medico'),(15,'ana.ramirez','password101','ana.ramirez@clinica.com','medico'),(16,'jose.fernandez','password202','jose.fernandez@clinica.com','medico');
 /*!40000 ALTER TABLE `usuario` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -211,4 +213,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-11-02 20:55:15
+-- Dump completed on 2024-11-03 11:36:28

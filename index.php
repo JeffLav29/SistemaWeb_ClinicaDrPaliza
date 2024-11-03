@@ -1,12 +1,15 @@
 <?php
 include "model/M_notificacion.php";
 include "controller/C_notificacion.php";
+include 'model/M_medico.php';
 
+$medicoModel = new M_medico();
 $notificacionModel = new M_notificacion();
 $notificacionControlador = new C_notificacion();
 $notificacionControlador->manejarSolicitud();
+$medicos = $medicoModel->obtenerMedicos();
 
-$notificacionesPorPagina = 10; 
+$notificacionesPorPagina = 10;
 $paginaActual = isset($_GET['pagina']) ? (int) $_GET['pagina'] : 1;
 $totalNotificaciones = count($notificacionModel->obtenerNotificaciones());
 $totalPaginas = ceil($totalNotificaciones / $notificacionesPorPagina);
@@ -65,6 +68,7 @@ $notificaciones = array_slice($notificacionModel->obtenerNotificaciones(), $inic
             <table class="table">
                 <thead class="table-dark">
                     <tr>
+                        <th scope="col">Motivo</th>
                         <th scope="col">Mensaje</th>
                         <th scope="col">Fecha</th>
                         <th scope="col">Interactuar</th>
@@ -73,6 +77,7 @@ $notificaciones = array_slice($notificacionModel->obtenerNotificaciones(), $inic
                 <tbody>
                     <?php foreach ($notificaciones as $notificacion): ?>
                         <tr>
+                            <td><?php echo $notificacion->motivo ?></td>
                             <td><?php echo $notificacion->mensaje; ?></td>
                             <td><?php echo $notificacion->programado_para; ?></td>
                             <td>
@@ -109,6 +114,32 @@ $notificaciones = array_slice($notificacionModel->obtenerNotificaciones(), $inic
                                                     <input type="hidden" name="accion" value="editar">
                                                     <input type="hidden" name="idnotificacion"
                                                         value="<?php echo $notificacion->idnotificacion; ?>">
+                                                        
+                                                    <div class="mb-3">
+                                                        <label for="motivo<?php echo $notificacion->idnotificacion; ?>"
+                                                            class="form-label">Motivo</label>
+                                                        <input type="text" class="form-control"
+                                                            id="motivo<?php echo $notificacion->idnotificacion; ?>"
+                                                            name="motivo"
+                                                            value="<?php echo htmlspecialchars($notificacion->motivo); ?>"
+                                                            required>
+                                                    </div>
+
+                                                    <div class="mb-3">
+                                                        <label for="medico_id<?php echo $notificacion->idnotificacion; ?>"
+                                                            class="form-label">Seleccionar Médico</label>
+                                                        <select class="form-select"
+                                                            id="medico_id<?php echo $notificacion->idnotificacion; ?>"
+                                                            name="medico_id" required>
+                                                            <option value="" disabled>Seleccione un médico</option>
+                                                            <?php foreach ($medicos as $medico): ?>
+                                                                <option value="<?php echo $medico->idmedico; ?>" <?php echo ($medico->idmedico == $notificacion->medico_id) ? 'selected' : ''; ?>>
+                                                                    <?php echo htmlspecialchars($medico->nombre . ' ' . $medico->apellido); ?>
+                                                                </option>
+                                                            <?php endforeach; ?>
+                                                        </select>
+                                                    </div>
+
                                                     <div class="mb-3">
                                                         <label for="mensaje<?php echo $notificacion->idnotificacion; ?>"
                                                             class="form-label">Mensaje</label>
@@ -118,6 +149,7 @@ $notificaciones = array_slice($notificacionModel->obtenerNotificaciones(), $inic
                                                             value="<?php echo htmlspecialchars($notificacion->mensaje); ?>"
                                                             required>
                                                     </div>
+
                                                     <div class="mb-3">
                                                         <label
                                                             for="programado_para<?php echo $notificacion->idnotificacion; ?>"
@@ -138,6 +170,8 @@ $notificaciones = array_slice($notificacionModel->obtenerNotificaciones(), $inic
                                         </div>
                                     </div>
                                 </div>
+
+
                             </td>
                         </tr>
                     <?php endforeach; ?>
@@ -185,6 +219,21 @@ $notificaciones = array_slice($notificacionModel->obtenerNotificaciones(), $inic
                             <input type="text" class="form-control" id="paciente_id" name="paciente_id" required>
                         </div>
                         <div class="mb-3">
+                            <label for="motivo" class="form-label">Motivo</label>
+                            <input type="text" class="form-control" id="motivo" name="motivo" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="medico_id" class="form-label">Médico</label>
+                            <select class="form-select" id="medico_id" name="medico_id" required>
+                                <option value="">Seleccione un médico</option>
+                                <?php foreach ($medicos as $medico): ?>
+                                    <option value="<?= $medico->idmedico ?>">
+                                        <?= $medico->nombre . ' ' . $medico->apellido ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <div class="mb-3">
                             <label for="mensaje" class="form-label">Mensaje</label>
                             <textarea class="form-control" name="mensaje" id="mensaje" rows="4" required
                                 placeholder="Escribe tu mensaje aquí..."></textarea>
@@ -203,6 +252,7 @@ $notificaciones = array_slice($notificacionModel->obtenerNotificaciones(), $inic
             </div>
         </div>
     </div>
+
 
     <script>
         function setDefaultTimeIfNeeded() {
